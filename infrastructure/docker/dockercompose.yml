@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  puppet-node:
+    build:
+      context: ../../
+      dockerfile: infrastructure/docker/Dockerfile
+    container_name: puppet-node-demo
+    # Keep the container running in the background
+    tty: true
+    # Mount the local project directory into the container
+    # This allows changes made to manifests on the host to immediately reflect inside
+    volumes:
+      - ../../:/opt/project
+    # The default command defined in the Dockerfile (tail -f /dev/null) will run,
+    # keeping the container alive for interactive testing and demonstration.
