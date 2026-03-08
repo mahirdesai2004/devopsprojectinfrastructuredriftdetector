@@ -1,74 +1,61 @@
-# ConfigDrift
+# Infrastructure Drift Detector
 
-Student Name: Mahir Desai  
-Registration Number: 23FE10CSE00345  
-Course: CSE3253 – DevOps  
-Semester: VI  
-Project Type: Configuration Management & Monitoring  
-Difficulty Level: Intermediate  
-
-## Academic Project Topic
-Infrastructure Drift Detector
-
----
+**Student Details:**
+- **Name**: Mahir Desai
+- **Registration Number**: 23FE10CSE00345
+- **Course**: CSE3253 DevOps 
+- **Project Title**: Infrastructure Drift Detector
+- **Category**: Puppet / Monitoring
+- **Difficulty**: Intermediate
 
 ## Project Overview
-ConfigDrift is an Infrastructure Drift Detection tool designed to identify configuration changes in managed systems. The project focuses on detecting deviations between the desired infrastructure state and the actual system state using Puppet-based configuration management.
-
----
+This project focuses on detecting and remediating configuration drift within managed infrastructure environments. It leverages Puppet as a configuration management tool alongside essential monitoring tools to ensure server configurations are maintained and automatically restored to the desired state if unauthorized modifications occur.
 
 ## Problem Statement
-In real-world infrastructure environments, manual changes or unintended updates can cause systems to drift from their intended configuration. Such configuration drift can lead to security vulnerabilities, system instability, and compliance issues. This project aims to detect and report such drifts effectively.
-
----
+In modern IT environments, manual changes or unexpected events can lead to systems continuously evolving from their baseline configurations. This phenomenon, known as configuration drift, can result in security vulnerabilities, system instability, and compliance failures. Detecting and resolving drift is a significant challenge when managing infrastructure at scale.
 
 ## Objectives
-- Define the desired system configuration using Puppet
-- Apply and enforce configuration consistency
-- Detect configuration drift caused by manual or unintended changes
-- Log and report detected drift for monitoring purposes
-
----
+- Ensure that essential system files and configurations match their declared state.
+- Continuously monitor target nodes for unauthorized changes.
+- Automatically remediate identified configuration drift to enforce compliance.
+- Provide alerts and visibility into drifted systems through basic monitoring logs.
 
 ## Technology Stack
-- Operating System: macOS / Linux
-- Version Control: Git & GitHub
-- Configuration Management: Puppet
-- Monitoring: Log-based drift reporting
+- **Configuration Management**: Puppet 
+- **Monitoring**: Nagios (or basic logging mechanisms via standard outputs / system logs)
+- **Containerization**: Docker
+- **Orchestration**: Kubernetes
+- **Infrastructure as Code**: Terraform
+- **CI/CD**: Jenkins, GitHub Actions
 
----
+## Installation Instructions
+1. Clone the repository: `git clone https://github.com/mahirdesai2004/devopsprojectinfrastructuredriftdetector.git`
+2. Change into the project directory: `cd devopsprojectinfrastructuredriftdetector`
+3. Ensure you have a functioning Puppet environment (e.g., Puppet Server and Agents).
+4. Apply Puppet manifests (for example):
+   ```bash
+   puppet apply infrastructure/puppet/drift_detector.pp
+   ```
+5. Deploy supporting container infrastructure via Docker or Kubernetes manifests provided.
 
 ## Project Structure
-ConfigDrift/
-├── README.md
-├── src/
-│     └── puppet/
-├── docs/
-├── infrastructure/
-├── monitoring/
-│     └── drift_logs/
-├── presentations/
-└── deliverables/ 
+```
+devopsprojectinfrastructuredriftdetector/
+├── README.md                 # Project documentation
+├── .gitignore                # Git ignored files
+├── LICENSE                   # Project license
+├── src/                      # Source code (configs, scripts, tests)
+├── docs/                     # Detailed project documentation and guides
+├── infrastructure/           # IaC and deployment manifests (Docker, K8s, Puppet, Terraform)
+├── pipelines/                # CI/CD pipeline definitions
+├── tests/                    # Testing suites (unit, integration, selenium)
+├── monitoring/               # Nagios configurations and dashboards
+├── presentations/            # Presentation files and scripts
+└── deliverables/             # Final assessments and demo recordings
+```
 
----
+## Drift Detection Explanation
+Drift detection is accomplished using Puppet's idempotent nature. Puppet continuously checks the target node's current state against the desired state defined in its manifests (e.g., specific file contents, permissions, or running services). If a discrepancy is found (drift), Puppet logs the change and automatically reapplies the configuration to enforce the correct state.
 
-## How the Project Works
-1. Puppet manifests define the desired configuration state
-2. Puppet applies the configuration to the system
-3. Any manual or unintended configuration change introduces drift
-4. Puppet detects this drift
-5. Drift details are logged for monitoring and analysis
-
----
-
-## Current Status
-- Repository initialized
-- Project structure created
-- Documentation in progress
-- Puppet implementation pending
-
----
-
-## Author
-Mahir Desai  
-GitHub: https://github.com/mahirdesai2004
+## Monitoring Explanation
+Monitoring complements Puppet by tracking events and the broader health of the infrastructure. Utilizing basic logs and tools like Nagios or centralized syslog, alerts are triggered when Puppet reports corrective actions, allowing administrators to investigate the root cause of the unauthorized changes.
