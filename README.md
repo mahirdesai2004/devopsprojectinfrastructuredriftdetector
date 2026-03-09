@@ -67,6 +67,19 @@ Once inside the Docker container shell (`puppet-node-demo`), you can run the aut
 ./src/scripts/demo_drift_detection.sh
 ```
 
+## Demonstration Screenshots
+
+Below are captures of the project running end-to-end, showcasing the isolated Docker environment, Puppet enforcing the baseline configuration, and the automatic remediation of simulated configuration drift.
+
+1. **Docker Environment Running**  
+   ![Docker Container Running](docs/screenshots/docker-running.png)
+   
+2. **Drift Detected by Puppet**  
+   ![Configuration Drift Detected](docs/screenshots/drift-detected.png)
+
+3. **Configuration Restored**  
+   ![Configuration Restored](docs/screenshots/drift-restored.png)
+
 ## Example Expected Output
 When running the demo script, you will see output similar to this:
 ```text
