@@ -69,16 +69,19 @@ Once inside the Docker container shell (`puppet-node-demo`), you can run the aut
 
 ## Demonstration Screenshots
 
-Below are captures of the project running end-to-end, showcasing the isolated Docker environment, Puppet enforcing the baseline configuration, and the automatic remediation of simulated configuration drift.
+Below are captures of the project running end-to-end, showcasing the Docker environment, Puppet detecting configuration drift, and the automatic remediation process.
 
-1. **Docker Environment Running**  
-   ![Docker Container Running](docs/screenshots/docker-running.png)
-   
-2. **Drift Detected by Puppet**  
-   ![Configuration Drift Detected](docs/screenshots/drift-detected.png)
+### Docker Environment Running
 
-3. **Configuration Restored**  
-   ![Configuration Restored](docs/screenshots/drift-restored.png)
+![Docker Container Running](docs/screenshots/docker-running.png)
+
+### Drift Detected by Puppet
+
+![Configuration Drift Detected](docs/screenshots/drift-detected.png)
+
+### Configuration Automatically Restored
+
+![Configuration Restored](docs/screenshots/drift-restored.png)
 
 ## Example Expected Output
 When running the demo script, you will see output similar to this:
@@ -134,7 +137,10 @@ devopsprojectinfrastructuredriftdetector/
 │   ├── designdocument.md
 │   ├── userguide.md
 │   ├── apidocumentation.md
-│   └── screenshots/          # Empty placeholder for demo images
+│   └── screenshots/
+│       ├── docker-running.png
+│       ├── drift-detected.png
+│       └── drift-restored.png
 ├── infrastructure/           # IaC and deployment manifests 
 │   ├── docker/
 │   │   ├── Dockerfile
