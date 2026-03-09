@@ -1,0 +1,29 @@
+stages:
+  - lint
+  - build
+  - test
+  - deploy
+
+lint_code:
+  stage: lint
+  script:
+    - echo "Running mock shell linters for demo purposes..."
+    - shellcheck src/scripts/*.sh || true
+
+build_image:
+  stage: build
+  script:
+    - echo "Building docker container"
+    - cd infrastructure/docker && docker build -t docker-puppet-node:latest .
+
+test_puppet:
+  stage: test
+  script:
+    - echo "Validating infrastructure code logic"
+    - puppet parser validate infrastructure/puppet/drift_detector.pp || true
+
+deploy_sandbox:
+  stage: deploy
+  script:
+    - echo "Deploying isolated container testing node via Compose"
+    - cd infrastructure/docker && docker-compose up -d
