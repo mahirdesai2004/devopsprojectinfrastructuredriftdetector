@@ -14,41 +14,41 @@
         <p class="subtitle">Mahir Desai | 23FE10CSE00345 | CSE3253 DevOps</p>
       </div>
       <div class="status-indicator">
-        <span class="pulse" id="system-status">System Active</span>
+        <span class="pulse" id="system-status">System Live Monitoring</span>
       </div>
     </header>
 
     <div class="diagram-section card">
-      <h2>Architecture Flow</h2>
-      <div class="diagram">
-        <div class="node">Docker</div> 
+      <h2>Real-Time Architecture Flow</h2>
+      <div class="diagram" id="flow-diagram">
+        <div class="node" id="node-docker">Docker Engine</div> 
         <div class="arrow">→</div>
-        <div class="node puppet">Puppet</div>
+        <div class="node" id="node-puppet">Puppet Agent</div>
         <div class="arrow">→</div>
-        <div class="node file">Config File</div>
+        <div class="node" id="node-file">Config File<br><small id="file-status-text">(Awaiting Data)</small></div>
         <div class="arrow">→</div>
-        <div class="node drift">Drift</div>
+        <div class="node" id="node-drift">Drift Monitor</div>
         <div class="arrow">→</div>
-        <div class="node fix">Puppet Fix</div>
+        <div class="node" id="node-fix">Auto Remediation</div>
       </div>
     </div>
 
     <div class="main-content">
       <div class="panel timeline-panel card">
-        <h2>Drift Timeline</h2>
+        <h2>Drift Event Timeline</h2>
         <ul class="timeline" id="timeline">
-          <li class="timeline-empty">Waiting for events...</li>
+          <li class="timeline-empty">Waiting for events from logs/drift_log.txt...</li>
         </ul>
       </div>
 
       <div class="side-panels">
         <div class="panel config-panel card">
-          <h2>Configuration State</h2>
-          <pre id="config-state">... awaiting sync ...</pre>
+          <h2>Live Configuration State</h2>
+          <pre id="config-state" class="code-block">... awaiting sync ...</pre>
         </div>
 
         <div class="panel log-panel card">
-          <h2>System Activity Log</h2>
+          <h2>System Activity Log (stdout)</h2>
           <div class="log-output" id="log-output">
             ...
           </div>
