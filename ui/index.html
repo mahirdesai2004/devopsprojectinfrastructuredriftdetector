@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Infrastructure Drift Detector</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Include Chart.js for visualization without npm/backend -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="container">
@@ -30,6 +32,14 @@
         <div class="node" id="node-drift">Drift Monitor</div>
         <div class="arrow">→</div>
         <div class="node" id="node-fix">Auto Remediation</div>
+      </div>
+    </div>
+
+    <!-- Data Visualization Section -->
+    <div class="chart-section card">
+      <h2>System Compliance Over Time</h2>
+      <div class="chart-container">
+        <canvas id="complianceChart"></canvas>
       </div>
     </div>
 

@@ -180,6 +180,13 @@ body {
   font-weight: bold;
 }
 
+/* Visualization Graph Container */
+.chart-container {
+  position: relative;
+  height: 220px;
+  width: 100%;
+}
+
 .main-content {
   display: grid;
   grid-template-columns: 1fr 1fr;

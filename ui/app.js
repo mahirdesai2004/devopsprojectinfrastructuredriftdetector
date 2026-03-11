@@ -1,5 +1,6 @@
 const LOG_FILE_URL = '../logs/drift_log.txt';
 let lastLogContent = '';
+let complianceChart;
 
 async function fetchLogs() {
   try {
@@ -14,6 +15,113 @@ async function fetchLogs() {
   } catch (error) {
     console.warn("Could not fetch logs. If viewing directly via file://, CORS will block this. Use localhost via python -m http.server", error);
   }
+}
+
+function initChart() {
+  const ctx = document.getElementById('complianceChart').getContext('2d');
+  complianceChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'System Compliance (%)',
+        data: [],
+        borderColor: '#10b981',
+        backgroundColor: 'rgba(16, 185, 129, 0.15)',
+        borderWidth: 3,
+        fill: true,
+        stepped: true,
+        pointRadius: 5,
+        pointBackgroundColor: '#1e293b',
+        pointBorderColor: '#10b981',
+        pointHoverRadius: 7,
+        tension: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 800 },
+      scales: {
+        y: {
+          min: -10,
+          max: 110,
+          ticks: {
+            stepSize: 50,
+            callback: function(value) {
+                if (value === 100) return 'Secure (100%)';
+                if (value === 0) return 'Drifted (0%)';
+                return '';
+            },
+            color: '#94a3b8',
+            font: { family: 'Inter', size: 12 }
+          },
+          grid: { color: 'rgba(51, 65, 85, 0.3)' }
+        },
+        x: {
+          ticks: { color: '#94a3b8', font: { family: 'Courier New', size: 11 } },
+          grid: { color: 'rgba(51, 65, 85, 0.3)' }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+            titleFont: { family: 'Courier New', size: 13 },
+            bodyFont: { family: 'Inter', size: 14, weight: 'bold' },
+            padding: 12,
+            borderColor: '#334155',
+            borderWidth: 1
+        }
+      }
+    }
+  });
+}
+
+function updateChart(lines) {
+  if (!complianceChart) initChart();
+  
+  const labels = [];
+  const data = [];
+  let currentCompliance = 100;
+  
+  lines.forEach(line => {
+    const parts = line.split('|').map(p => p.trim());
+    if (parts.length === 3) {
+      const time = parts[0];
+      const event = parts[1].toLowerCase();
+      const status = parts[2].toLowerCase();
+      
+      labels.push(time);
+      
+      if (status === 'success' && event.includes('baseline')) {
+        currentCompliance = 100;
+      } else if (status === 'warning' || event.includes('introduced')) {
+        currentCompliance = 0;
+      } else if (status === 'alert' || event.includes('detected')) {
+        currentCompliance = 0;
+      } else if (status === 'success' && event.includes('restored')) {
+        currentCompliance = 100;
+      }
+      
+      data.push(currentCompliance);
+    }
+  });
+  
+  // Dynamic coloring based on current end-state
+  if (currentCompliance === 100) {
+      complianceChart.data.datasets[0].borderColor = '#10b981';
+      complianceChart.data.datasets[0].backgroundColor = 'rgba(16, 185, 129, 0.15)';
+      complianceChart.data.datasets[0].pointBorderColor = '#10b981';
+  } else {
+      complianceChart.data.datasets[0].borderColor = '#ef4444';
+      complianceChart.data.datasets[0].backgroundColor = 'rgba(239, 68, 68, 0.15)';
+      complianceChart.data.datasets[0].pointBorderColor = '#ef4444';
+  }
+  
+  complianceChart.data.labels = labels;
+  complianceChart.data.datasets[0].data = data;
+  complianceChart.update();
 }
 
 function resetNodes() {
@@ -125,9 +233,13 @@ function processLogs(logText) {
   if (lines.length === 0) {
     timeline.innerHTML = '<li class="timeline-empty">Waiting for DevOps pipeline events...</li>';
     resetNodes();
+    if(complianceChart) updateChart([]); // Clear chart
   } else {
     // Update the live architecture chart based on the LAST known event in the log
     updateVisualization(lastStatus, lastEvent);
+    
+    // Update Data Visualization Graph
+    updateChart(lines);
   }
 
   configElement.textContent = currentState;
