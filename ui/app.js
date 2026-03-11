@@ -90,17 +90,16 @@ function updateChart(lines) {
     if (parts.length === 3) {
       const time = parts[0];
       const event = parts[1].toLowerCase();
-      const status = parts[2].toLowerCase();
       
       labels.push(time);
       
-      if (status === 'success' && event.includes('baseline')) {
+      if (event.includes('baseline applied')) {
         currentCompliance = 100;
-      } else if (status === 'warning' || event.includes('introduced')) {
+      } else if (event.includes('drift introduced')) {
         currentCompliance = 0;
-      } else if (status === 'alert' || event.includes('detected')) {
+      } else if (event.includes('drift detected')) {
         currentCompliance = 0;
-      } else if (status === 'success' && event.includes('restored')) {
+      } else if (event.includes('configuration restored')) {
         currentCompliance = 100;
       }
       
@@ -108,7 +107,6 @@ function updateChart(lines) {
     }
   });
   
-  // Dynamic coloring based on current end-state
   if (currentCompliance === 100) {
       complianceChart.data.datasets[0].borderColor = '#10b981';
       complianceChart.data.datasets[0].backgroundColor = 'rgba(16, 185, 129, 0.15)';
@@ -125,7 +123,7 @@ function updateChart(lines) {
 }
 
 function resetNodes() {
-  const nodes = ['node-docker', 'node-puppet', 'node-file', 'node-drift', 'node-fix'];
+  const nodes = ['node-docker', 'node-puppet', 'node-file', 'node-drift', 'node-detection', 'node-fix'];
   nodes.forEach(id => {
     const el = document.getElementById(id);
     if(el) el.className = 'node';
@@ -141,10 +139,10 @@ function updateVisualization(status, event) {
   const puppet = document.getElementById('node-puppet');
   const file = document.getElementById('node-file');
   const drift = document.getElementById('node-drift');
+  const detection = document.getElementById('node-detection');
   const fix = document.getElementById('node-fix');
   const fileText = document.getElementById('file-status-text');
 
-  // Architecture foundations always pulsing light green to show heartbeat
   docker.classList.add('active-safe');
   puppet.classList.add('active-safe');
 
@@ -160,6 +158,7 @@ function updateVisualization(status, event) {
     file.classList.add('active-danger');
     fileText.innerHTML = '<strong>(Drifted)</strong>';
     drift.classList.add('active-danger');
+    detection.classList.add('active-danger');
     fix.classList.add('active-fix');
   } else if (status === 'success' && event.includes('restored')) {
     file.classList.add('active-safe');
@@ -206,18 +205,23 @@ function processLogs(logText) {
       const event = parts[1];
       const status = parts[2].toLowerCase();
 
-      // Write styled raw log
       const div = document.createElement('div');
-      if (status === 'warning') {
+      if (status === 'success') {
+        div.style.color = 'var(--success)';
+      } else if (status === 'warning') {
         div.className = 'log-warn';
       } else if (status === 'alert') {
         div.className = 'log-err';
-        driftCount++;
-      } else if (status === 'success') {
-        div.style.color = 'var(--success)';
       }
       div.textContent = `[${time}] ${event} | ${status}`;
       logOutput.appendChild(div);
+
+      if (event.toLowerCase().includes('drift detected')) {
+        driftCount++;
+      }
+      if (event.toLowerCase().includes('configuration restored')) {
+        lastFixTime = time;
+      }
 
       lastStatus = status;
       lastEvent = event;
@@ -225,7 +229,6 @@ function processLogs(logText) {
       const li = document.createElement('li');
       li.className = `status-${status}`;
       
-      // Highlight the very latest event
       if (index === lines.length - 1) {
         li.classList.add('latest-event');
       }
@@ -253,7 +256,6 @@ function processLogs(logText) {
       } else if (event.includes('restored')) {
         currentState = "app_mode=production\ntimeout=30\nenable_secure_mode=true";
         configElement.className = "code-block";
-        lastFixTime = time;
         isSecure = true;
       }
     }
@@ -262,7 +264,7 @@ function processLogs(logText) {
   if (lines.length === 0) {
     timeline.innerHTML = '<li class="timeline-empty">Waiting for DevOps pipeline events...</li>';
     resetNodes();
-    if(complianceChart) updateChart([]); // Clear chart
+    if(complianceChart) updateChart([]);
   } else {
     updateVisualization(lastStatus, lastEvent);
     updateChart(lines);
@@ -271,10 +273,8 @@ function processLogs(logText) {
 
   configElement.textContent = currentState;
   logOutput.scrollTop = logOutput.scrollHeight;
-  // auto-scroll timeline
   timeline.scrollTop = timeline.scrollHeight;
 }
 
-// Auto-refresh logs every 2 seconds
 setInterval(fetchLogs, 2000);
 fetchLogs();

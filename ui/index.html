@@ -15,40 +15,42 @@
         <h1>Infrastructure Drift Detector</h1>
         <p class="subtitle">Mahir Desai | 23FE10CSE00345 | CSE3253 DevOps</p>
       </div>
-      <!-- Top KPIs -->
-      <div class="kpi-container">
-        <div class="kpi-card" id="kpi-container-status">
-          <span class="kpi-label">Container Status</span>
-          <span class="kpi-value safe-text">Online</span>
-        </div>
-        <div class="kpi-card" id="kpi-drift-count">
-          <span class="kpi-label">Total Drift Events</span>
-          <span class="kpi-value" id="val-drift-count">0</span>
-        </div>
-        <div class="kpi-card" id="kpi-last-fix">
-          <span class="kpi-label">Last Auto-Remediation</span>
-          <span class="kpi-value" id="val-last-fix">N/A</span>
-        </div>
-        <div class="kpi-card status-indicator">
-          <span class="pulse" id="system-status">System Active</span>
-        </div>
-      </div>
     </header>
+
+    <!-- Top KPIs -->
+    <div class="kpi-container">
+      <div class="kpi-card" id="kpi-container-status">
+        <span class="kpi-label">Container Status</span>
+        <span class="kpi-value safe-text">Online</span>
+      </div>
+      <div class="kpi-card" id="kpi-drift-count">
+        <span class="kpi-label">Total Drift Events</span>
+        <span class="kpi-value" id="val-drift-count">0</span>
+      </div>
+      <div class="kpi-card" id="kpi-last-fix">
+        <span class="kpi-label">Last Auto-Remediation</span>
+        <span class="kpi-value" id="val-last-fix">N/A</span>
+      </div>
+      <div class="kpi-card status-indicator-card">
+        <span class="kpi-label">System Status</span>
+        <span class="pulse" id="system-status">System Secure</span>
+      </div>
+    </div>
 
     <div class="diagram-section card">
       <h2>Real-Time Architecture Flow</h2>
       <div class="diagram" id="flow-diagram">
-        <div class="node" id="node-docker">🐳<br>Docker Container</div> 
-        <div class="arrow">↓</div>
-        <div class="node" id="node-puppet">🎭<br>Puppet Configuration</div>
-        <div class="arrow">↓</div>
-        <div class="node" id="node-file">📄<br>System Configuration File<br><small id="file-status-text">(Awaiting Data)</small></div>
-        <div class="arrow">↓</div>
-        <div class="node" id="node-drift">⚠️<br>Configuration Drift</div>
-        <div class="arrow">↓</div>
-        <div class="node" id="node-detection">🔍<br>Puppet Detection</div>
-        <div class="arrow">↓</div>
-        <div class="node" id="node-fix">🛠️<br>Automatic Remediation</div>
+        <div class="node" id="node-docker">Docker Container</div> 
+        <div class="arrow">→</div>
+        <div class="node" id="node-puppet">Puppet Config</div>
+        <div class="arrow">→</div>
+        <div class="node" id="node-file">System Config File<br><small id="file-status-text">(Awaiting Data)</small></div>
+        <div class="arrow">→</div>
+        <div class="node" id="node-drift">Config Drift</div>
+        <div class="arrow">→</div>
+        <div class="node" id="node-detection">Puppet Detects</div>
+        <div class="arrow">→</div>
+        <div class="node" id="node-fix">Auto Remediation</div>
       </div>
     </div>
 
