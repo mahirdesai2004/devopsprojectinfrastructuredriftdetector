@@ -150,6 +150,7 @@ function updateVisualization(status, event) {
 
   if (status === 'success' && event.includes('baseline')) {
     file.classList.add('active-safe');
+    drift.classList.add('active-safe');
     fileText.innerHTML = '<strong>(Secure)</strong>';
   } else if (status === 'warning' || event.includes('introduced')) {
     file.classList.add('active-warning');
@@ -162,6 +163,7 @@ function updateVisualization(status, event) {
     fix.classList.add('active-fix');
   } else if (status === 'success' && event.includes('restored')) {
     file.classList.add('active-safe');
+    drift.classList.add('active-safe');
     fileText.innerHTML = '<strong>(Remediated)</strong>';
     fix.classList.add('active-safe');
   }
