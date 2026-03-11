@@ -231,8 +231,11 @@ The project includes a lightweight HTML/JS dashboard that provides a professiona
 - **Configuration state**
 - **Drift events**
 - **Remediation timeline**
+- **Live compliance metrics**
 
-### Instructions
+![Dashboard Screenshot](docs/screenshots/dashboard_screenshot.png)
+
+### Local Instructions
 1. Open the dashboard locally in your web browser:
    ```bash
    open ui/index.html
@@ -243,6 +246,15 @@ The project includes a lightweight HTML/JS dashboard that provides a professiona
    # (Or run inside the container if already attached)
    ```
 The dashboard automatically visualizes drift detection events directly from the generated logs!
+
+### 🌍 Cloud Deployment (GitHub Pages)
+Because this dashboard is purely decoupled frontend code, it can be deployed for free so anyone can view the project interface globally!
+1. Go to your repository on GitHub.
+2. Navigate to **Settings > Pages**.
+3. Under **Source**, select `Deploy from a branch`.
+4. Select the `main` branch and `/ (root)` folder, then save.
+5. GitHub will provide a live URL (e.g., `https://mahirdesai2004.github.io/devopsprojectinfrastructuredriftdetector/ui/`).
+*(Note: Terminal simulation logs will show as "Waiting for events..." since the real Puppet container still runs securely on your local computer).*
 
 ---
 
