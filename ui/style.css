@@ -143,105 +143,10 @@ body {
   letter-spacing: 1.5px;
 }
 
-.diagram-section {
-  text-align: center;
-}
-
-.diagram {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  padding: 10px 0;
-}
-
-.node {
-  background: rgba(51, 65, 85, 0.4);
-  padding: 14px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  color: var(--text-muted);
-  transition: all 0.4s ease;
-  border: 1px solid transparent;
-  text-align: center;
-  min-width: 120px;
-}
-
-.node small {
-  display: block;
-  font-size: 12px;
-  font-weight: 400;
-  margin-top: 6px;
-  opacity: 0.9;
-}
-
-/* Dynamic States for Nodes */
-.active-safe {
-  background: rgba(16, 185, 129, 0.15) !important;
-  color: var(--success) !important;
-  border: 1px solid rgba(16, 185, 129, 0.6) !important;
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
-}
-
-.active-warning {
-  background: rgba(245, 158, 11, 0.15) !important;
-  color: var(--warning) !important;
-  border: 1px solid rgba(245, 158, 11, 0.6) !important;
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
-  animation: pulse-warn 1.5s infinite;
-}
-
-.active-danger {
-  background: rgba(239, 68, 68, 0.15) !important;
-  color: var(--danger) !important;
-  border: 1px solid rgba(239, 68, 68, 0.6) !important;
-  box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
-  animation: pulse-danger 1s infinite;
-}
-
-.active-fix {
-  background: rgba(59, 130, 246, 0.15) !important;
-  color: var(--primary) !important;
-  border: 1px solid rgba(59, 130, 246, 0.6) !important;
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-  animation: pulse-fix 1s infinite;
-}
-
-@keyframes pulse-safe {
-  0% { box-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
-  50% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
-  100% { box-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
-}
-
-@keyframes pulse-warn {
-  0% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
-  50% { box-shadow: 0 0 25px rgba(245, 158, 11, 0.7); }
-  100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
-}
-
-@keyframes pulse-danger {
-  0% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); }
-  50% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.8); }
-  100% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); }
-}
-
-@keyframes pulse-fix {
-  0% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
-  50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.8); }
-  100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
-}
-
-.arrow {
-  color: var(--text-muted);
-  font-size: 20px;
-  font-weight: bold;
-}
-
 /* Visualization Graph Container */
 .chart-container {
   position: relative;
-  height: 220px;
+  height: 250px;
   width: 100%;
 }
 

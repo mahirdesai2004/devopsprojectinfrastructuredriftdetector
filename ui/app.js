@@ -122,51 +122,7 @@ function updateChart(lines) {
   complianceChart.update();
 }
 
-function resetNodes() {
-  const nodes = ['node-docker', 'node-puppet', 'node-file', 'node-drift', 'node-detection', 'node-fix'];
-  nodes.forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.className = 'node';
-  });
-  const fileStatus = document.getElementById('file-status-text');
-  if(fileStatus) fileStatus.innerHTML = '(Checking...)';
-}
 
-function updateVisualization(status, event) {
-  resetNodes();
-  
-  const docker = document.getElementById('node-docker');
-  const puppet = document.getElementById('node-puppet');
-  const file = document.getElementById('node-file');
-  const drift = document.getElementById('node-drift');
-  const detection = document.getElementById('node-detection');
-  const fix = document.getElementById('node-fix');
-  const fileText = document.getElementById('file-status-text');
-
-  docker.classList.add('active-safe');
-  puppet.classList.add('active-safe');
-
-  if (status === 'success' && event.includes('baseline')) {
-    file.classList.add('active-safe');
-    drift.classList.add('active-safe');
-    fileText.innerHTML = '<strong>(Secure)</strong>';
-  } else if (status === 'warning' || event.includes('introduced')) {
-    file.classList.add('active-warning');
-    fileText.innerHTML = '<strong>(Tampered)</strong>';
-    drift.classList.add('active-warning');
-  } else if (status === 'alert' || event.includes('detected')) {
-    file.classList.add('active-danger');
-    fileText.innerHTML = '<strong>(Drifted)</strong>';
-    drift.classList.add('active-danger');
-    detection.classList.add('active-danger');
-    fix.classList.add('active-fix');
-  } else if (status === 'success' && event.includes('restored')) {
-    file.classList.add('active-safe');
-    drift.classList.add('active-safe');
-    fileText.innerHTML = '<strong>(Remediated)</strong>';
-    fix.classList.add('active-safe');
-  }
-}
 
 function updateKPIs(totalDrifts, lastFixTime, isSecure) {
   document.getElementById('val-drift-count').innerText = totalDrifts;
@@ -226,24 +182,27 @@ function processLogs(logText) {
       lastStatus = status;
       lastEvent = event;
 
-      const li = document.createElement('li');
-      li.className = `status-${status}`;
-      
-      if (index === lines.length - 1) {
-        li.classList.add('latest-event');
+      // Only display the 4 most recent events in the timeline
+      if (index >= lines.length - 4) {
+        const li = document.createElement('li');
+        li.className = `status-${status}`;
+        
+        if (index === lines.length - 1) {
+          li.classList.add('latest-event');
+        }
+        
+        const timeSpan = document.createElement('span');
+        timeSpan.className = 'time';
+        timeSpan.textContent = time;
+
+        const eventSpan = document.createElement('span');
+        eventSpan.className = 'event-text';
+        eventSpan.textContent = event.charAt(0).toUpperCase() + event.slice(1);
+
+        li.appendChild(timeSpan);
+        li.appendChild(eventSpan);
+        timeline.appendChild(li);
       }
-      
-      const timeSpan = document.createElement('span');
-      timeSpan.className = 'time';
-      timeSpan.textContent = time;
-
-      const eventSpan = document.createElement('span');
-      eventSpan.className = 'event-text';
-      eventSpan.textContent = event.charAt(0).toUpperCase() + event.slice(1);
-
-      li.appendChild(timeSpan);
-      li.appendChild(eventSpan);
-      timeline.appendChild(li);
 
       if (status === 'success' && event.includes('baseline')) {
         currentState = "app_mode=production\ntimeout=30\nenable_secure_mode=true";
@@ -263,10 +222,8 @@ function processLogs(logText) {
 
   if (lines.length === 0) {
     timeline.innerHTML = '<li class="timeline-empty">Waiting for DevOps pipeline events...</li>';
-    resetNodes();
     if(complianceChart) updateChart([]);
   } else {
-    updateVisualization(lastStatus, lastEvent);
     updateChart(lines);
     updateKPIs(driftCount, lastFixTime, isSecure);
   }

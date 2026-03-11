@@ -37,22 +37,7 @@
       </div>
     </div>
 
-    <div class="diagram-section card">
-      <h2>Real-Time Architecture Flow</h2>
-      <div class="diagram" id="flow-diagram">
-        <div class="node" id="node-docker">Docker Container</div> 
-        <div class="arrow">→</div>
-        <div class="node" id="node-puppet">Puppet Config</div>
-        <div class="arrow">→</div>
-        <div class="node" id="node-file">System Config File<br><small id="file-status-text">(Awaiting Data)</small></div>
-        <div class="arrow">→</div>
-        <div class="node" id="node-drift">Config Drift</div>
-        <div class="arrow">→</div>
-        <div class="node" id="node-detection">Puppet Detects</div>
-        <div class="arrow">→</div>
-        <div class="node" id="node-fix">Auto Remediation</div>
-      </div>
-    </div>
+
 
     <!-- Data Visualization Section -->
     <div class="chart-section card">
@@ -72,7 +57,7 @@
 
       <div class="side-panels">
         <div class="panel config-panel card">
-          <h2>Live Configuration State</h2>
+          <h2>Configuration File State</h2>
           <pre id="config-state" class="code-block">... awaiting sync ...</pre>
         </div>
 
