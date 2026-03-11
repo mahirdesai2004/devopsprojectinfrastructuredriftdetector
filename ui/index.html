@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infrastructure Drift Detector</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="title-area">
+        <h1>Infrastructure Drift Detector</h1>
+        <p class="subtitle">Mahir Desai | 23FE10CSE00345 | CSE3253 DevOps</p>
+      </div>
+      <div class="status-indicator">
+        <span class="pulse" id="system-status">System Active</span>
+      </div>
+    </header>
+
+    <div class="diagram-section card">
+      <h2>Architecture Flow</h2>
+      <div class="diagram">
+        <div class="node">Docker</div> 
+        <div class="arrow">→</div>
+        <div class="node puppet">Puppet</div>
+        <div class="arrow">→</div>
+        <div class="node file">Config File</div>
+        <div class="arrow">→</div>
+        <div class="node drift">Drift</div>
+        <div class="arrow">→</div>
+        <div class="node fix">Puppet Fix</div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="panel timeline-panel card">
+        <h2>Drift Timeline</h2>
+        <ul class="timeline" id="timeline">
+          <li class="timeline-empty">Waiting for events...</li>
+        </ul>
+      </div>
+
+      <div class="side-panels">
+        <div class="panel config-panel card">
+          <h2>Configuration State</h2>
+          <pre id="config-state">... awaiting sync ...</pre>
+        </div>
+
+        <div class="panel log-panel card">
+          <h2>System Activity Log</h2>
+          <div class="log-output" id="log-output">
+            ...
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

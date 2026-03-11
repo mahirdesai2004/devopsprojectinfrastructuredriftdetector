@@ -6,40 +6,68 @@
 # Project: CSE3253 DevOps 
 # ==============================================================================
 
-echo "======================================================================"
-echo " Starting Infrastructure Drift Detection Demo"
-echo "======================================================================"
+LOG_FILE="/opt/project/logs/drift_log.txt"
+
+# Ensure logs directory exists and clear previous run
+mkdir -p /opt/project/logs
+> "$LOG_FILE"
+chmod 666 "$LOG_FILE"
+
+log_event() {
+  local timestamp=$(date +"%H:%M:%S")
+  local event="$1"
+  local status="$2"
+  echo "$timestamp | $event | $status" >> "$LOG_FILE"
+}
+
+echo "============================================================"
+echo "Infrastructure Drift Detection Demo"
 echo ""
 
 # Step 1: Apply baseline configuration
-echo "[1/4] Applying baseline configuration using Puppet..."
-puppet apply /opt/project/infrastructure/puppet/drift_detector.pp
+echo "[$(date +"%H:%M:%S")] Applying baseline configuration with Puppet"
+puppet apply /opt/project/infrastructure/puppet/drift_detector.pp >/dev/null 2>&1
 echo ""
+
+echo "[$(date +"%H:%M:%S")] Baseline configuration created"
+log_event "baseline applied" "success"
+
+echo "— Current Configuration —"
+cat /opt/configdrift/critical_app.conf
+echo ""
+
+sleep 2
 
 # Step 2: Simulate Drift
-echo "[2/4] Simulating configuration drift..."
-echo "      Modifying: /opt/configdrift/critical_app.conf"
-echo "      Changing 'timeout=30' to 'timeout=999' (Unauthorized change)"
+echo "[$(date +"%H:%M:%S")] Simulating configuration drift"
 sed -i 's/timeout=30/timeout=999/g' /opt/configdrift/critical_app.conf
+log_event "drift introduced" "warning"
 echo ""
 
-echo "--- Current File Contents (DRIFTED) ---"
+echo "— Drifted Configuration —"
 cat /opt/configdrift/critical_app.conf
-echo "---------------------------------------"
 echo ""
+
+sleep 2
 
 # Step 3: Run Puppet again to detect and remediate drift
-echo "[3/4] Running Puppet again to detect drift..."
-puppet apply /opt/project/infrastructure/puppet/drift_detector.pp
+echo "[$(date +"%H:%M:%S")] Running Puppet to detect drift"
+puppet apply /opt/project/infrastructure/puppet/drift_detector.pp >/dev/null 2>&1
 echo ""
+
+echo "[$(date +"%H:%M:%S")] Drift detected"
+log_event "drift detected" "alert"
+
+sleep 2
 
 # Step 4: Verify Remediation
-echo "[4/4] Verifying the configuration was restored..."
-echo "--- Current File Contents (RESTORED) ---"
-cat /opt/configdrift/critical_app.conf
-echo "----------------------------------------"
+echo "[$(date +"%H:%M:%S")] Puppet restoring configuration"
+log_event "configuration restored" "success"
 echo ""
 
-echo "======================================================================"
-echo " Demo Completed Successfully!"
-echo "======================================================================"
+echo "— Restored Configuration —"
+cat /opt/configdrift/critical_app.conf
+echo ""
+
+echo "============================================================"
+echo "Demo Completed"

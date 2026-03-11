@@ -91,6 +91,14 @@ devops-project-infrastructuredriftdetector/
 │   └── scripts/                        Utility scripts
 │       └── demo_drift_detection.sh
 │
+├── ui/                                 Visualization Dashboard
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
+│
+├── logs/                               System Output Logs
+│   └── drift_log.txt
+│
 ├── docs/                               Documentation
 │   ├── project-plan.md                 Project plan and timeline
 │   ├── design-document.md              Technical design document
@@ -214,6 +222,27 @@ docker-compose up -d
 
 ### Technical Documentation
 - [Design Document](docs/design-document.md)
+
+---
+
+## 🖥️ Drift Monitoring Dashboard
+
+The project includes a lightweight HTML/JS dashboard that provides a professional visualization layer for the existing DevOps workflow without requiring any complex frameworks or backend servers. It visualizes:
+- **Configuration state**
+- **Drift events**
+- **Remediation timeline**
+
+### Instructions
+1. Open the dashboard locally in your web browser:
+   ```bash
+   open ui/index.html
+   ```
+2. Run the demo script in your terminal:
+   ```bash
+   docker exec -it puppet-node-demo bash src/scripts/demo_drift_detection.sh
+   # (Or run inside the container if already attached)
+   ```
+The dashboard automatically visualizes drift detection events directly from the generated logs!
 
 ---
 
