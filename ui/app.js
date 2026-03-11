@@ -169,6 +169,20 @@ function updateVisualization(status, event) {
   }
 }
 
+function updateKPIs(totalDrifts, lastFixTime, isSecure) {
+  document.getElementById('val-drift-count').innerText = totalDrifts;
+  document.getElementById('val-last-fix').innerText = lastFixTime ? lastFixTime : 'N/A';
+  
+  const statusIndicator = document.getElementById('system-status');
+  if (isSecure) {
+    statusIndicator.className = 'pulse';
+    statusIndicator.innerText = 'System Secure';
+  } else {
+    statusIndicator.className = 'pulse-alert';
+    statusIndicator.innerText = 'Drift Alert';
+  }
+}
+
 function processLogs(logText) {
   const lines = logText.trim().split('\n').filter(line => line.length > 0);
   const timeline = document.getElementById('timeline');
@@ -181,30 +195,40 @@ function processLogs(logText) {
   let currentState = "... awaiting configuration ...";
   let lastStatus = null;
   let lastEvent = null;
+  let isSecure = true;
+  let driftCount = 0;
+  let lastFixTime = null;
 
-  lines.forEach(line => {
-    // Write raw log out to terminal display with light parsing
-    const div = document.createElement('div');
-    if(line.includes('| warning')) {
-        div.className = 'log-warn';
-    } else if(line.includes('| alert')) {
-        div.className = 'log-err';
-    }
-    div.textContent = `> ${line}`;
-    logOutput.appendChild(div);
-
-    // Parse the pipeline format: timestamp | event | status
+  lines.forEach((line, index) => {
     const parts = line.split('|').map(p => p.trim());
     if (parts.length === 3) {
       const time = parts[0];
       const event = parts[1];
       const status = parts[2].toLowerCase();
 
+      // Write styled raw log
+      const div = document.createElement('div');
+      if (status === 'warning') {
+        div.className = 'log-warn';
+      } else if (status === 'alert') {
+        div.className = 'log-err';
+        driftCount++;
+      } else if (status === 'success') {
+        div.style.color = 'var(--success)';
+      }
+      div.textContent = `[${time}] ${event} | ${status}`;
+      logOutput.appendChild(div);
+
       lastStatus = status;
       lastEvent = event;
 
       const li = document.createElement('li');
       li.className = `status-${status}`;
+      
+      // Highlight the very latest event
+      if (index === lines.length - 1) {
+        li.classList.add('latest-event');
+      }
       
       const timeSpan = document.createElement('span');
       timeSpan.className = 'time';
@@ -218,16 +242,19 @@ function processLogs(logText) {
       li.appendChild(eventSpan);
       timeline.appendChild(li);
 
-      // Mutate theoretical configuration state based on detected events
       if (status === 'success' && event.includes('baseline')) {
         currentState = "app_mode=production\ntimeout=30\nenable_secure_mode=true";
         configElement.className = "code-block";
+        isSecure = true;
       } else if (status === 'warning' || event.includes('introduced')) {
         currentState = "app_mode=production\ntimeout=999   <-- DRIFT DETECTED\nenable_secure_mode=true";
         configElement.className = "code-block config-warning";
+        isSecure = false;
       } else if (event.includes('restored')) {
         currentState = "app_mode=production\ntimeout=30\nenable_secure_mode=true";
         configElement.className = "code-block";
+        lastFixTime = time;
+        isSecure = true;
       }
     }
   });
@@ -237,17 +264,17 @@ function processLogs(logText) {
     resetNodes();
     if(complianceChart) updateChart([]); // Clear chart
   } else {
-    // Update the live architecture chart based on the LAST known event in the log
     updateVisualization(lastStatus, lastEvent);
-    
-    // Update Data Visualization Graph
     updateChart(lines);
+    updateKPIs(driftCount, lastFixTime, isSecure);
   }
 
   configElement.textContent = currentState;
   logOutput.scrollTop = logOutput.scrollHeight;
+  // auto-scroll timeline
+  timeline.scrollTop = timeline.scrollHeight;
 }
 
-// Auto-refresh logs every 1 second for snappy presentation
-setInterval(fetchLogs, 1000);
+// Auto-refresh logs every 2 seconds
+setInterval(fetchLogs, 2000);
 fetchLogs();

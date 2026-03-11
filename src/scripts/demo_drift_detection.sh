@@ -8,9 +8,9 @@
 
 LOG_FILE="/opt/project/logs/drift_log.txt"
 
-# Ensure logs directory exists and clear previous run
+# Ensure logs directory exists
 mkdir -p /opt/project/logs
-> "$LOG_FILE"
+touch "$LOG_FILE"
 chmod 666 "$LOG_FILE"
 
 log_event() {

@@ -15,23 +15,40 @@
         <h1>Infrastructure Drift Detector</h1>
         <p class="subtitle">Mahir Desai | 23FE10CSE00345 | CSE3253 DevOps</p>
       </div>
-      <div class="status-indicator">
-        <span class="pulse" id="system-status">System Live Monitoring</span>
+      <!-- Top KPIs -->
+      <div class="kpi-container">
+        <div class="kpi-card" id="kpi-container-status">
+          <span class="kpi-label">Container Status</span>
+          <span class="kpi-value safe-text">Online</span>
+        </div>
+        <div class="kpi-card" id="kpi-drift-count">
+          <span class="kpi-label">Total Drift Events</span>
+          <span class="kpi-value" id="val-drift-count">0</span>
+        </div>
+        <div class="kpi-card" id="kpi-last-fix">
+          <span class="kpi-label">Last Auto-Remediation</span>
+          <span class="kpi-value" id="val-last-fix">N/A</span>
+        </div>
+        <div class="kpi-card status-indicator">
+          <span class="pulse" id="system-status">System Active</span>
+        </div>
       </div>
     </header>
 
     <div class="diagram-section card">
       <h2>Real-Time Architecture Flow</h2>
       <div class="diagram" id="flow-diagram">
-        <div class="node" id="node-docker">Docker Engine</div> 
-        <div class="arrow">→</div>
-        <div class="node" id="node-puppet">Puppet Agent</div>
-        <div class="arrow">→</div>
-        <div class="node" id="node-file">Config File<br><small id="file-status-text">(Awaiting Data)</small></div>
-        <div class="arrow">→</div>
-        <div class="node" id="node-drift">Drift Monitor</div>
-        <div class="arrow">→</div>
-        <div class="node" id="node-fix">Auto Remediation</div>
+        <div class="node" id="node-docker">🐳<br>Docker Container</div> 
+        <div class="arrow">↓</div>
+        <div class="node" id="node-puppet">🎭<br>Puppet Configuration</div>
+        <div class="arrow">↓</div>
+        <div class="node" id="node-file">📄<br>System Configuration File<br><small id="file-status-text">(Awaiting Data)</small></div>
+        <div class="arrow">↓</div>
+        <div class="node" id="node-drift">⚠️<br>Configuration Drift</div>
+        <div class="arrow">↓</div>
+        <div class="node" id="node-detection">🔍<br>Puppet Detection</div>
+        <div class="arrow">↓</div>
+        <div class="node" id="node-fix">🛠️<br>Automatic Remediation</div>
       </div>
     </div>
 

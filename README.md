@@ -228,10 +228,11 @@ docker-compose up -d
 ## 🖥️ Drift Monitoring Dashboard
 
 The project includes a lightweight HTML/JS dashboard that provides a professional visualization layer for the existing DevOps workflow without requiring any complex frameworks or backend servers. It visualizes:
-- **Configuration state**
-- **Drift events**
-- **Remediation timeline**
-- **Live compliance metrics**
+- **Live Configuration State**: See exactly what the managed file looks like on the node.
+- **Drift Detection Timeline**: View an auto-scrolling log of system lifecycle events.
+- **Remediation Events**: Multi-run support allows monitoring continuous baseline/drift cycles.
+- **Compliance Metrics**: A real-time Chart.js graph tracks 100% compliance vs 0% drift across time.
+- **System KPIs**: At-a-glance widgets tracking Container Status, Total Drift Events count, and the Last Auto-Remediation timestamp.
 
 ![Dashboard Screenshot](docs/screenshots/dashboard_screenshot.png)
 
